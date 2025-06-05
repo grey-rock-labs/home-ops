@@ -1,0 +1,81 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: freshrss
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 4.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-labs
+        namespace: flux-system
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+  values:
+    controllers:
+      freshrss:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        pod:
+          hostUsers: false
+
+        containers:
+          app:
+            image:
+              repository: freshrss/freshrss
+              tag: 1.26.3-alpine
+            env:
+              CRON_MIN: "*"
+              DOMAIN: freshrss.greyrock.dev
+              LISTEN: 8080
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            resources:
+              requests:
+                cpu: 12m
+                memory: 128M
+              limits:
+                memory: 512M
+
+    service:
+      app:
+        controller: freshrss
+        ports:
+          http:
+            port: &port 8080
+
+    persistence:
+      data:
+        existingClaim: freshrss
+        advancedMounts:
+          freshrss:
+            app:
+              - path: /var/www/FreshRSS/data
+                subPath: data
+                readOnly: false
+              - path: /var/www/FreshRSS/extensions
+                subPath: extensions
+                readOnly: false
+
+    route:
+      app:
+        hostnames:
+          - freshrss.greyrock.dev
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port

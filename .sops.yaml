@@ -1,0 +1,23 @@
+---
+keys:
+  - &user_todd age10c2f0yan4hzqh8ulw42tvqymlzxfn7wwndteh8dsa9utu8szly2smzas7f
+  - &user_flux age10r5u6fs2jzjznxf0ywjv088nuk22qrkz0jc5za2zhlz73eq8wfwq4sk0z8
+
+creation_rules:
+  - path_regex: kubernetes/.*/talos/.*\.sops\.ya?ml$
+    key_groups:
+      - age:
+          - *user_todd
+          - *user_flux
+
+  - path_regex: kubernetes/.*\.sops\.ya?ml$
+    encrypted_regex: "^(data|stringData)$"
+    key_groups:
+      - age:
+          - *user_todd
+          - *user_flux
+
+  - path_regex: .*\.sops\.ya?ml$
+    key_groups:
+      - age:
+          - *user_todd

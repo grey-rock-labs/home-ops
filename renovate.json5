@@ -1,0 +1,19 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: [
+    "github>doonga/renovate-config",
+    "github>grey-rock-labs/home-ops//.renovate/groups.json5",
+    "github>grey-rock-labs/home-ops//.renovate/autoMerge.json5",
+    "github>grey-rock-labs/home-ops//.renovate/grafanaDashboards.json5",
+  ],
+  flux: {
+    managerFilePatterns: ["/^kubernetes/.+\\.ya?ml$/"],
+  },
+  "helm-values": {
+    managerFilePatterns: ["/^kubernetes/.+\\.ya?ml$/"],
+  },
+  kubernetes: {
+    managerFilePatterns: ["/^kubernetes/.+\\.ya?ml$/"],
+  },
+
+}

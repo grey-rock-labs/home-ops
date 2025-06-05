@@ -1,0 +1,12 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.greyrock.dev/externaldns.k8s.io/dnsendpoint_v1alpha1.json
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: cloudflared-tunnel
+spec:
+  endpoints:
+    - dnsName: ingress-ext.greyrock.dev
+      recordType: CNAME
+      #TODO: Update this to your cloudflared tunnel URL
+      targets: ["fixme.cfargotunnel.com"]

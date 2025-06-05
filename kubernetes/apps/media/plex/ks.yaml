@@ -1,0 +1,63 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.greyrock.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &appname plex
+  namespace: &namespace media
+spec:
+  targetNamespace: *namespace
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *appname
+  interval: 30m
+  timeout: 5m
+  path: "./kubernetes/apps/media/plex/app"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  wait: false
+  dependsOn:
+    - name: onepassword-store
+      namespace: external-secrets
+    - name: volsync
+      namespace: system
+    - name: keda
+      namespace: system
+  components:
+    - ../../../../components/volsync
+    - ../../../../components/keda/nas-nfs-scaler
+  postBuild:
+    substitute:
+      APP: *appname
+      VOLSYNC_CLAIM: plex-config
+      VOLSYNC_CAPACITY: 50Gi
+---
+# yaml-language-server: $schema=https://k8s-schemas.greyrock.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &appname plex-image-cleanup
+  namespace: &namespace media
+spec:
+  targetNamespace: *namespace
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *appname
+  interval: 30m
+  timeout: 5m
+  path: "./kubernetes/apps/media/plex/plex-image-cleanup"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  wait: false
+  dependsOn:
+    - name: onepassword-store
+      namespace: external-secrets
+  postBuild:
+    substitute:
+      APP: *appname

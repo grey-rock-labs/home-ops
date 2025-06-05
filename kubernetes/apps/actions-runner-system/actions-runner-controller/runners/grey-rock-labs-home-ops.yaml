@@ -1,0 +1,75 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.greyrock.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: arc-grey-rock-labs-home-ops
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: gha-runner-scale-set
+  driftDetection:
+    mode: enabled
+  dependsOn:
+    - name: actions-runner-controller
+      namespace: actions-runner-system
+    - name: openebs
+      namespace: openebs
+  values:
+    githubConfigUrl: https://github.com/grey-rock-labs/home-ops
+
+    minRunners: 0
+    maxRunners: 2
+
+    containerMode:
+      type: kubernetes
+      kubernetesModeWorkVolumeClaim:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: openebs-hostpath
+        resources:
+          requests:
+            storage: 5Gi
+
+    controllerServiceAccount:
+      name: actions-runner-controller
+      namespace: actions-runner-system
+
+    template:
+      spec:
+        containers:
+          - name: runner
+            image: ghcr.io/home-operations/actions-runner:2.325.0@sha256:8345f634bbaaedbbdff1abb212649b1821baf295e5bcddf420f07847d7f35a87
+            command:
+              - /home/runner/run.sh
+            env:
+              - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
+                value: "false"
+              - name: NODE_IP
+                valueFrom:
+                  fieldRef:
+                    fieldPath: status.hostIP
+            volumeMounts:
+              - mountPath: /var/run/secrets/talos.dev
+                name: talos
+                readOnly: true
+        serviceAccountName: actions-runner
+        volumes:
+          - name: talos
+            secret:
+              secretName: actions-runner
+
+  valuesFrom:
+    - kind: Secret
+      name: actions-runner-controller-secret
+      valuesKey: github_app_id
+      targetPath: githubConfigSecret.github_app_id
+    - kind: Secret
+      name: actions-runner-controller-secret
+      valuesKey: github_app_installation_id
+      targetPath: githubConfigSecret.github_app_installation_id
+    - kind: Secret
+      name: actions-runner-controller-secret
+      valuesKey: github_app_private_key
+      targetPath: githubConfigSecret.github_app_private_key

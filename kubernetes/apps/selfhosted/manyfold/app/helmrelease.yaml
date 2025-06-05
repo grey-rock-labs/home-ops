@@ -1,0 +1,167 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: manyfold
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 4.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-labs
+        namespace: flux-system
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+  values:
+    controllers:
+      manyfold:
+        forceRename: manyfold
+        annotations:
+          secret.reloader.stakater.com/reload: manyfold-secret
+
+        pod:
+          securityContext:
+            runAsUser: 2000
+            runAsGroup: 2000
+            fsGroup: 2000
+            fsGroupChangePolicy: "OnRootMismatch"
+
+        initContainers:
+          chown-tmpdirs:
+            image:
+              repository: docker.io/library/alpine
+              tag: "3.22"
+            command:
+              - /bin/sh
+              - -c
+            args:
+              - |
+                chmod o-rwx /tmp
+            securityContext:
+              runAsUser: 0
+
+        containers:
+          main:
+            image:
+              repository: ghcr.io/bjw-s-labs/manyfold
+              tag: 0.111.2@sha256:378b5cb90000b71cdb597beceaa0c8c29b76a06c339118946be7c3fd2ac455b3
+            env:
+              DATABASE_URL: sqlite3:/data/database/manyfold.sqlite3
+              MULTIUSER: false
+              PORT: &httpPort 3214
+              REDIS_URL: redis://manyfold-redis.selfhosted.svc.cluster.local:6379
+              REGISTRATION: false
+              SECRET_KEY_BASE:
+                valueFrom:
+                  secretKeyRef:
+                    name: manyfold-secret
+                    key: MANYFOLD_SECRET_KEY
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: *httpPort
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 20m
+                memory: 128Mi
+              limits:
+                memory: 1536Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+
+      redis:
+        pod:
+          securityContext:
+            runAsUser: 65534
+            runAsGroup: 65534
+        strategy: RollingUpdate
+        containers:
+          redis:
+            image:
+              repository: ghcr.io/valkey-io/valkey
+              tag: 8.1.1
+            args:
+              - --save
+              - ""
+              - --appendonly
+              - "no"
+            resources:
+              requests:
+                cpu: 5m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+
+    service:
+      app:
+        forceRename: manyfold
+        primary: true
+        controller: manyfold
+        ports:
+          http:
+            port: *httpPort
+      redis:
+        controller: redis
+        ports:
+          http:
+            port: &port 6379
+
+    persistence:
+      data:
+        existingClaim: manyfold-data
+        advancedMounts:
+          manyfold:
+            main:
+              - path: /data/database
+                subPath: database
+              - path: /data/libraries/main
+                subPath: libraries/main
+      tmpfs:
+        type: emptyDir
+        advancedMounts:
+          manyfold:
+            main: &tmpdirs
+              - path: /tmp
+                subPath: host-tmp
+              - path: /app/tmp
+                subPath: app-tmp
+              - path: /app/log
+                subPath: app-log
+            chown-tmpdirs: *tmpdirs
+
+    route:
+      app:
+        hostnames:
+          - manyfold.greyrock.dev
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *httpPort

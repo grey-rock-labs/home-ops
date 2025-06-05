@@ -1,0 +1,17 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: selfhosted
+resources:
+  # - ./atuin/ks.yaml # Disabled until sync actually works
+  - ./freshrss/ks.yaml
+  - ./karakeep/ks.yaml
+  - ./it-tools/ks.yaml
+  - ./manyfold/ks.yaml
+  - ./n8n/ks.yaml
+  - ./ocis/ks.yaml
+  - ./paperless/ks.yaml
+components:
+  - ../../components/namespace
+  - ../../components/flux/alerts

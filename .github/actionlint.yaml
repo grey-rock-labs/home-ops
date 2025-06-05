@@ -1,0 +1,5 @@
+---
+self-hosted-runner:
+  labels:
+    - arc-grey-rock-labs
+    - arc-grey-rock-labs-home-ops
