@@ -102,15 +102,33 @@ spec:
                 subPath: log
               - path: /transcode
                 subPath: transcode
-      nfs-nas-media:
+      nfs-nas1-media:
         type: nfs
         server: nas1.greyrock.internal
-        path: /var/nfs/shared/grey_rock_data/Media
+        path: /var/nfs/shared/Media
         advancedMounts:
           plex:
             app:
-              - path: /data/nas-media/Library
+              - path: /data/nas1-media/Library
                 subPath: Library
+      nfs-nas2-media:
+        type: nfs
+        server: nas2.greyrock.internal
+        path: /var/nfs/shared/Media
+        advancedMounts:
+          plex:
+            app:
+              - path: /data/nas2-media/Library
+                subPath: Library
+      # nfs-nas3-media:
+      #   type: nfs
+      #   server: nas3.greyrock.internal
+      #   path: /var/nfs/shared/Media
+      #   advancedMounts:
+      #     plex:
+      #       app:
+      #         - path: /data/nas3-media/Library
+      #           subPath: Library
 
     route:
       app:
