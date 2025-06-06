@@ -11,11 +11,9 @@ spec:
   targets:
     staticConfig:
       static:
-        - downstairs-hallway-zigbee-adapter.greyrock.internal
-        - garage-tablet.greyrock.internal
-        - hallway-tablet.greyrock.internal
-        - livingroom-vacuum.greyrock.internal
-        - pikvm.greyrock.internal
+        - dining-room-zigbee-adapter.greyrock.internal
+        # TODO: Uncomment when the device is available
+        # - pikvm.greyrock.internal
 ---
 # yaml-language-server: $schema=https://k8s-schemas.greyrock.dev/monitoring.coreos.com/probe_v1.json
 apiVersion: monitoring.coreos.com/v1
@@ -30,3 +28,5 @@ spec:
     staticConfig:
       static:
         - nas1.greyrock.internal:2049
+        - nas2.greyrock.internal:2049
+        # - nas3.greyrock.internal:2049
