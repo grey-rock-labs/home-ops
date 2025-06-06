@@ -18,6 +18,6 @@ spec:
     - type: prometheus
       metadata:
         serverAddress: http://prometheus-operated.monitoring.svc.cluster.local:9090
-        query: probe_success{instance="downstairs-hallway-zigbee-adapter.greyrock.internal"}
+        query: probe_success{instance="dining-room-zigbee-adapter.greyrock.internal"}
         threshold: "1"
         ignoreNullValues: "0"
