@@ -104,7 +104,7 @@ spec:
         server: nas1.greyrock.internal
         path: /var/nfs/shared/Media
         globalMounts:
-          - path: /data/nas1-media/Downloads/sabnzbd
+          - path: /data/nas1-media/Media
             subPath: Downloads/sabnzbd
       tmpfs:
         type: emptyDir
