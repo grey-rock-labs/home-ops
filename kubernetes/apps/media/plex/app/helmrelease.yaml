@@ -37,7 +37,7 @@ spec:
               repository: ghcr.io/home-operations/plex
               tag: 1.41.7.9823
             env:
-              PLEX_ADVERTISE_URL: https://10.1.1.136:32400,https://plex.greyrock.dev:443
+              PLEX_ADVERTISE_URL: https://10.3.0.136:32400,https://plex.greyrock.dev:443
               PLEX_NO_AUTH_NETWORKS: 10.244.0.0/16
             probes:
               liveness: &probes
@@ -75,7 +75,7 @@ spec:
         controller: plex
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: 10.1.1.136
+          lbipam.cilium.io/ips: 10.3.0.136
         ports:
           http:
             port: &port 32400
@@ -105,7 +105,7 @@ spec:
       nfs-nas-media:
         type: nfs
         server: nas1.greyrock.internal
-        path: /mnt/tank/Media
+        path: /var/nfs/shared/grey_rock_data/Media
         advancedMounts:
           plex:
             app:

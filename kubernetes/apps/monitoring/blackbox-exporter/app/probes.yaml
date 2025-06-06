@@ -13,7 +13,6 @@ spec:
       static:
         - downstairs-hallway-zigbee-adapter.greyrock.internal
         - garage-tablet.greyrock.internal
-        - nas1.greyrock.internal
         - hallway-tablet.greyrock.internal
         - livingroom-vacuum.greyrock.internal
         - pikvm.greyrock.internal

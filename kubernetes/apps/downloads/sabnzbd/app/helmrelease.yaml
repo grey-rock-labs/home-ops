@@ -102,7 +102,7 @@ spec:
       downloads:
         type: nfs
         server: nas1.greyrock.internal
-        path: /mnt/tank/Media
+        path: /var/nfs/shared/grey_rock_data/Media
         globalMounts:
           - path: /data/nas-media/Downloads/sabnzbd
             subPath: Downloads/sabnzbd
