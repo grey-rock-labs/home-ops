@@ -91,7 +91,7 @@ spec:
       recs:
         type: nfs
         server: nas1.greyrock.internal
-        path: /var/nfs/shared/grey_rock_data/Apps/scrypted
+        path: /var/nfs/shared/Apps/scrypted
         globalMounts:
           - path: /recs
 
