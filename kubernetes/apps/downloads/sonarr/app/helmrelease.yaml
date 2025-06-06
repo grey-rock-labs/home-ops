@@ -95,9 +95,9 @@ spec:
       media:
         type: nfs
         server: nas1.greyrock.internal
-        path: /var/nfs/shared/grey_rock_data/Media
+        path: /var/nfs/shared/Media
         globalMounts:
-          - path: /data/nas-media
+          - path: /data/nas1-media
 
     route:
       app:
