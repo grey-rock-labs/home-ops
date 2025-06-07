@@ -35,12 +35,8 @@ spec:
           securityContext:
             runAsUser: 2000
             runAsGroup: 2000
-            fsGroup: 2000
+            fsGroup: 988
             fsGroupChangePolicy: "OnRootMismatch"
-            supplementalGroups:
-              - 44
-              - 109
-              - 65542 # nas1:external-services
 
         containers:
           app:
