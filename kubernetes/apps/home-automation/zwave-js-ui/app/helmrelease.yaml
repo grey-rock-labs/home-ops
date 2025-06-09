@@ -77,7 +77,7 @@ spec:
       data:
         existingClaim: zwave-js-ui-data
         advancedMounts:
-          zigbee2mqtt:
+          zwave-js-ui:
             app:
               - path: /usr/src/app/store
 
