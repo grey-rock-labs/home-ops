@@ -9,6 +9,7 @@ resources:
   - ./home-assistant/ks.yaml
   - ./scrypted/ks.yaml
   - ./zigbee2mqtt/ks.yaml
+  - ./zwave-js-ui/ks.yaml
 components:
   - ../../components/namespace
   - ../../components/flux/alerts

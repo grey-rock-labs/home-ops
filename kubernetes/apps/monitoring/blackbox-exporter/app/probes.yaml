@@ -12,6 +12,7 @@ spec:
     staticConfig:
       static:
         - dining-room-zigbee-adapter.greyrock.internal
+        - game-room-zwave-controller.greyrock.internal
         # TODO: Uncomment when the device is available
         # - pikvm.greyrock.internal
 ---
