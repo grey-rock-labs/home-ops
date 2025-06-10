@@ -42,6 +42,10 @@ nodes:
             - hardwareAddr: "58:47:ca:77:5a:*"
               driver: i40e
           xmitHashPolicy: layer3+4
+          miimon: 100
+          lacpRate: fast
+          updelay: 0
+          downdelay: 0
         dhcp: true
         vip:
           ip: *talosControlplaneVip
@@ -76,6 +80,10 @@ nodes:
             - hardwareAddr: "58:47:ca:77:5e:*"
               driver: i40e
           xmitHashPolicy: layer3+4
+          miimon: 100
+          lacpRate: fast
+          updelay: 0
+          downdelay: 0
         dhcp: true
         vip:
           ip: *talosControlplaneVip
@@ -105,6 +113,10 @@ nodes:
             - hardwareAddr: "58:47:ca:77:58:*"
               driver: i40e
           xmitHashPolicy: layer3+4
+          miimon: 100
+          lacpRate: fast
+          updelay: 0
+          downdelay: 0
         dhcp: true
         vip:
           ip: *talosControlplaneVip
