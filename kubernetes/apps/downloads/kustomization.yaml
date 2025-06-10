@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: downloads
 resources:
   # Flux-Kustomizations
+  - ./autopulse/ks.yaml
   - ./prowlarr/ks.yaml
   - ./radarr/ks.yaml
   - ./recyclarr/ks.yaml

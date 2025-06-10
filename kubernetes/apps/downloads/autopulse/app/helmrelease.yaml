@@ -1,0 +1,125 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: autopulse
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 4.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-labs
+        namespace: flux-system
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+  values:
+    controllers:
+      autopulse:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        containers:
+          app:
+            image:
+              repository: docker.io/danonline/autopulse
+              tag: v1.3.2
+            env:
+              AUTOPULSE__APP__DATABASE_URL: sqlite://data/database.db
+              AUTOPULSE__TARGETS__PLEX__TYPE: plex
+              AUTOPULSE__TRIGGERS__RADARR__TYPE: radarr
+              AUTOPULSE__TRIGGERS__SONARR__TYPE: sonarr
+              AUTOPULSE__AUTH__USERNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: autopulse-secret
+                    key: auth_username
+              AUTOPULSE__AUTH__PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: autopulse-secret
+                    key: auth_password
+            # probes:
+            #   liveness: &probes
+            #     enabled: true
+            #     custom: true
+            #     spec:
+            #       httpGet:
+            #         path: /ping
+            #         port: *port
+            #       initialDelaySeconds: 0
+            #       periodSeconds: 10
+            #       timeoutSeconds: 1
+            #       failureThreshold: 3
+            #   readiness: *probes
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 256Mi
+          ui:
+            image:
+              repository: docker.io/danonline/autopulse
+              tag: ui-v1.3.1
+            env:
+              FORCE_DEFAULT_SERVER_URL: true
+              DEFAULT_SERVER_URL: http://autopulse-app.downloads.svc.cluster.local:2875
+              FORCE_SERVER_URL: http://autopulse-app.downloads.svc.cluster.local:2875
+              FORCE_AUTH: true
+              AUTOPULSE__AUTH__USERNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: autopulse-secret
+                    key: auth_username
+              AUTOPULSE__AUTH__PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: autopulse-secret
+                    key: auth_password
+              SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: autopulse-secret
+                    key: session_secret
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 256Mi
+
+    service:
+      app:
+        controller: autopulse
+        ports:
+          http:
+            port: 2875
+      ui:
+        controller: autopulse
+        ports:
+          http:
+            port: &ui-port 2880
+
+    persistence:
+      config:
+        existingClaim: autopulse-config
+        advancedMounts:
+          autopulse:
+            app:
+              - path: /app
+
+    route:
+      app:
+        hostnames:
+          - autopulse.greyrock.dev
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: ui
+                port: *ui-port
