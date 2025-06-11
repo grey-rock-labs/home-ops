@@ -102,12 +102,12 @@ spec:
         path: /var/nfs/shared/Media
         globalMounts:
           - path: /data/nas2-media
-      # media3:
-      #   type: nfs
-      #   server: nas3.greyrock.internal
-      #   path: /var/nfs/shared/Media
-      #   globalMounts:
-      #     - path: /data/nas3-media
+      media3:
+        type: nfs
+        server: nas3.greyrock.internal
+        path: /var/nfs/shared/Media
+        globalMounts:
+          - path: /data/nas3-media
 
     route:
       app:

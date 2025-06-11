@@ -13,8 +13,7 @@ spec:
       static:
         - dining-room-zigbee-adapter.greyrock.internal
         - game-room-zwave-controller.greyrock.internal
-        # TODO: Uncomment when the device is available
-        # - pikvm.greyrock.internal
+        - pikvm.greyrock.dev
 ---
 # yaml-language-server: $schema=https://k8s-schemas.greyrock.dev/monitoring.coreos.com/probe_v1.json
 apiVersion: monitoring.coreos.com/v1
@@ -30,4 +29,4 @@ spec:
       static:
         - nas1.greyrock.internal:2049
         - nas2.greyrock.internal:2049
-        # - nas3.greyrock.internal:2049
+        - nas3.greyrock.internal:2049
