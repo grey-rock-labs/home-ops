@@ -1,0 +1,81 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: node-red
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 4.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-labs
+        namespace: flux-system
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+  values:
+    controllers:
+      node-red:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsUser: 977
+            runAsGroup: 988
+            fsGroup: 988
+            fsGroupChangePolicy: "OnRootMismatch"
+        containers:
+          app:
+            image:
+              repository: docker.io/nodered/node-red
+              tag: 4.0.9@sha256:0b295b3a14c512548567ca99db631bc37b23bfc79fd009ee8248a610fafdb4b5
+            env:
+              NODE_RED_ENABLE_PROJECTS: "true"
+              NODE_RED_ENABLE_SAFE_MODE: "false"
+            resources:
+              requests:
+                cpu: 25m
+                memory: 384Mi
+              limits:
+                memory: 512Mi
+            # probes:
+            #   liveness:
+            #     enabled: true
+            #   readiness:
+            #     enabled: true
+            # resources:
+            #   requests:
+            #     cpu: 136m
+            #     memory: 1024Mi
+            #   limits:
+            #     gpu.intel.com/i915: 1
+            #     memory: 8192Mi
+
+    service:
+      app:
+        ports:
+          http:
+            port: 1880
+
+    persistence:
+      config:
+        existingClaim: node-red-config
+        advancedMounts:
+          node-red:
+            app:
+              - path: /data
+
+    route:
+      app:
+        hostnames:
+          - node-red.greyrock.dev
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs: [{}]
