@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: media
 resources:
   - ./maintainerr/ks.yaml
+  - ./overseerr/ks.yaml
   - ./plex/ks.yaml
   - ./tautulli/ks.yaml
   - ./watchstate/ks.yaml
