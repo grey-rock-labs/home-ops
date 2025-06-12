@@ -93,12 +93,10 @@ spec:
 
     service:
       app:
-        controller: autopulse
         ports:
           http:
             port: 2875
       ui:
-        controller: autopulse
         ports:
           http:
             port: &ui-port 2880

@@ -68,13 +68,12 @@ spec:
 
     service:
       app:
-        controller: plex
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: 10.3.0.136
         ports:
           http:
-            port: &port 32400
+            port: 32400
 
     persistence:
       config:
@@ -135,6 +134,4 @@ spec:
             namespace: kube-system
             sectionName: https
         rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
+          - backendRefs: [{}]

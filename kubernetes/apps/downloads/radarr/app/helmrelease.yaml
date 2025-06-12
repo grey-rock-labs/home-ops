@@ -77,7 +77,6 @@ spec:
 
     service:
       app:
-        controller: radarr
         ports:
           http:
             port: *port
@@ -118,6 +117,4 @@ spec:
             namespace: kube-system
             sectionName: https
         rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
+          - backendRefs: [{}]

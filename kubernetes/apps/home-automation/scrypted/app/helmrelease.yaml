@@ -58,10 +58,9 @@ spec:
 
     service:
       app:
-        controller: scrypted
         ports:
           http:
-            port: &port 11080
+            port: 11080
             primary: true
           rebroadcast1:
             port: 34135
@@ -100,6 +99,4 @@ spec:
             namespace: kube-system
             sectionName: https
         rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
+          - backendRefs: [{}]

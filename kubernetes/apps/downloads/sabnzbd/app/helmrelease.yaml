@@ -85,7 +85,6 @@ spec:
 
     service:
       app:
-        controller: sabnzbd
         ports:
           http:
             port: *port
@@ -136,6 +135,4 @@ spec:
             namespace: kube-system
             sectionName: https
         rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
+          - backendRefs: [{}]
