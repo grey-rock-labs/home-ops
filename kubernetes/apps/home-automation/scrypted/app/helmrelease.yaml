@@ -27,9 +27,9 @@ spec:
           annotations:
             k8s.v1.cni.cncf.io/networks: |
               [{
-                "name":"multus-iot",
+                "name":"multus-surveillance",
                 "namespace": "network",
-                "ips": ["10.10.0.153/24"],
+                "ips": ["10.100.0.153/24"],
                 "mac": "76:fa:11:c0:c9:84"
               }]
           securityContext:
