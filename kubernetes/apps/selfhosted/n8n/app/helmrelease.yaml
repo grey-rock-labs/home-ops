@@ -81,8 +81,6 @@ spec:
           - name: internal
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs: [{}]
       webhooks:
         hostnames:
           - n8n-webhook.greyrock.dev
