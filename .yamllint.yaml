@@ -1,29 +1,26 @@
 ---
 ignore: |
-  .ansible/
-  .direnv/
   .private/
   .vscode/
   *.sops.*
-  ansible/roles/xanmanning.k3s/
 
 extends: default
 
 rules:
-  truthy:
-    allowed-values: ["true", "false", "on"]
+  brackets:
+    max-spaces-inside: 1
+    min-spaces-inside: 0
+    require-spaces: false
 
   comments:
+    require-starting-space: true
     min-spaces-from-content: 1
+  indentation:
+    spaces: consistent
+    indent-sequences: false
+    check-multi-line-strings: false
 
   line-length: disable
-
-  braces:
-    min-spaces-inside: 0
-    max-spaces-inside: 1
-
-  brackets:
-    min-spaces-inside: 0
-    max-spaces-inside: 0
-
-  indentation: enable
+  quoted-strings:
+    quote-type: double
+    required: false
