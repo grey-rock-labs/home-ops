@@ -15,9 +15,9 @@ spec:
     kind: Deployment
     name: zigbee2mqtt
   triggers:
-    - type: prometheus
-      metadata:
-        serverAddress: http://prometheus-operated.monitoring.svc.cluster.local:9090
-        query: probe_success{instance="dining-room-zigbee-adapter.greyrock.internal"}
-        threshold: "1"
-        ignoreNullValues: "0"
+  - type: prometheus
+    metadata:
+      serverAddress: http://prometheus-operated.monitoring.svc.cluster.local:9090
+      query: probe_success{instance="dining-room-slzb06.greyrock.internal"}
+      threshold: "1"
+      ignoreNullValues: "0"
