@@ -6,5 +6,6 @@
         "redhat.vscode-yaml",
         "samuelcolvin.jinjahtml",
         "mhutchie.git-graph",
+        "bluebrown.yamlfmt",
     ]
 }
