@@ -50,12 +50,6 @@ nodes:
         vip:
           ip: *talosControlplaneVip
         vlans:
-          - &vlan2
-            vlanId: 2
-            mtu: 1500
-            dhcp: false
-            dhcpOptions:
-              routeMetric: 4096
           - &vlan10
             vlanId: 10
             mtu: 1500
@@ -100,7 +94,6 @@ nodes:
         vip:
           ip: *talosControlplaneVip
         vlans:
-          - *vlan2
           - *vlan10
           - *vlan100
 
@@ -135,7 +128,6 @@ nodes:
         vip:
           ip: *talosControlplaneVip
         vlans:
-          - *vlan2
           - *vlan10
           - *vlan100
 
