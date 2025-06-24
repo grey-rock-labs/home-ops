@@ -80,10 +80,16 @@ spec:
 
     service:
       app:
+        primary: true
+        type: LoadBalancer
+        sessionAffinity: ClientIP
+        annotations:
+          lbipam.cilium.io/ips: 10.3.0.134
         ports:
           http:
             port: 8123
-            primary: true
+      code-server:
+        ports:
           code-server:
             port: 12321
 
