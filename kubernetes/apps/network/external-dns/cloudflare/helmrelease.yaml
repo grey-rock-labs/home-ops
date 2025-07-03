@@ -63,7 +63,7 @@ spec:
               version: v1
               kind: Deployment
               name: *name
-            patch: |
+            patch: |-
               - op: add
                 path: /spec/template/spec/enableServiceLinks
                 value: false

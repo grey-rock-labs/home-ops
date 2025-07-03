@@ -21,6 +21,6 @@ rules:
     required: false
   truthy:
     allowed-values:
-    - "true"
-    - "false"
-    - "on"
+      - "true"
+      - "false"
+      - "on"

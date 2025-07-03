@@ -37,18 +37,18 @@ spec:
                 memory: 384Mi
               limits:
                 memory: 512Mi
-            # probes:
-            #   liveness:
-            #     enabled: true
-            #   readiness:
-            #     enabled: true
-            # resources:
-            #   requests:
-            #     cpu: 136m
-            #     memory: 1024Mi
-            #   limits:
-            #     gpu.intel.com/i915: 1
-            #     memory: 8192Mi
+                # probes:
+                #   liveness:
+                #     enabled: true
+                #   readiness:
+                #     enabled: true
+                # resources:
+                #   requests:
+                #     cpu: 136m
+                #     memory: 1024Mi
+                #   limits:
+                #     gpu.intel.com/i915: 1
+                #     memory: 8192Mi
 
     service:
       app:

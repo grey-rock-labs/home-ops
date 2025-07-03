@@ -9,5 +9,5 @@ spec:
     - name: nas-nfs.rules
       rules:
         - record: nfs_probe_all_success
-          expr: |
+          expr: |-
             sum(probe_success{instance=~"nas[1-3].greyrock.internal:2049"}) == bool 3

@@ -11,6 +11,6 @@ tasks:
     cmds:
       - for:
           var: SECRET_FILES
-        cmd: |
+        cmd: |-
           sops --decrypt --in-place "{{ .ITEM }}"
           sops --encrypt --in-place "{{ .ITEM }}"

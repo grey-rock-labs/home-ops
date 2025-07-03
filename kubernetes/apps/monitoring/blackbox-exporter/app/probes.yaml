@@ -11,9 +11,9 @@ spec:
   targets:
     staticConfig:
       static:
-      - dining-room-slzb06.greyrock.internal
-      - game-room-zwave-controller.greyrock.internal
-      - pikvm.greyrock.dev
+        - dining-room-slzb06.greyrock.internal
+        - game-room-zwave-controller.greyrock.internal
+        - pikvm.greyrock.dev
 ---
 # yaml-language-server: $schema=https://k8s-schemas.greyrock.dev/monitoring.coreos.com/probe_v1.json
 apiVersion: monitoring.coreos.com/v1
@@ -27,6 +27,6 @@ spec:
   targets:
     staticConfig:
       static:
-      - nas1.greyrock.internal:2049
-      - nas2.greyrock.internal:2049
-      - nas3.greyrock.internal:2049
+        - nas1.greyrock.internal:2049
+        - nas2.greyrock.internal:2049
+        - nas3.greyrock.internal:2049
