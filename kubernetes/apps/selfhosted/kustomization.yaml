@@ -9,7 +9,6 @@ resources:
   - ./karakeep/ks.yaml
   - ./it-tools/ks.yaml
   - ./manyfold/ks.yaml
-  - ./n8n/ks.yaml
   - ./paperless/ks.yaml
 components:
   - ../../components/namespace
