@@ -104,6 +104,8 @@ spec:
         globalMounts:
           - path: /tmp
             subPath: tmp
+          - path: /config/logs
+            subPath: logs
       ephemeral:
         type: custom
         volumeSpec:
