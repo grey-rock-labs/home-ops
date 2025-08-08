@@ -1,0 +1,53 @@
+---
+machine:
+  type: controlplane
+  install:
+    diskSelector:
+      model: SAMSUNG MZ1LB1T9HALS-00007
+  network:
+    hostname: k8s3.greyrock.internal
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "58:47:ca:77:58:8c"
+        ignore: true
+        # Intel VPRO
+      - deviceSelector:
+          hardwareAddr: "58:47:ca:77:58:8d"
+        ignore: true
+        # bond0
+      - interface: bond0
+        bond:
+          mode: 802.3ad
+          deviceSelectors:
+            - hardwareAddr: "58:47:ca:77:58:*"
+              driver: i40e
+          xmitHashPolicy: layer3+4
+          miimon: 100
+          lacpRate: fast
+          updelay: 0
+          downdelay: 0
+        vip:
+          ip: 10.3.0.30
+        vlans:
+          - &vlan10
+            vlanId: 10
+            mtu: 1500
+            dhcp: false
+            dhcpOptions:
+              routeMetric: 4096
+          - &vlan100
+            vlanId: 100
+            mtu: 1500
+            dhcp: false
+            dhcpOptions:
+              routeMetric: 4096
+  nodeLabels:
+    intel.feature.node.kubernetes.io/gpu: "true"
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: local-hostpath
+provisioning:
+  diskSelector:
+    match: disk.model == "Samsung SSD 990 PRO 1TB" && !system_disk
+  minSize: 1TB
