@@ -1,6 +1,5 @@
 ---
 machine:
-  type: controlplane
   install:
     diskSelector:
       model: SAMSUNG MZ1LB1T9HALS-00007
