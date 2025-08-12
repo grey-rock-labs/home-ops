@@ -30,7 +30,8 @@ spec:
       namespace: system
   components:
     - ../../../../components/volsync
-    - ../../../../components/keda/nas-nfs-scaler
+    # TODO: Uncomment when new nas deployed
+    # - ../../../../components/keda/nas-nfs-scaler
   postBuild:
     substitute:
       APP: *appname
